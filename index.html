@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>言葉の錬金術師</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f0e8; font-family: sans-serif; }
+.app-bg { min-height: 100vh; background: #f5f0e8; padding: 1.5rem 1rem 2rem; }
+.app { max-width: 520px; margin: 0 auto; }
+.header { text-align: center; margin-bottom: 1.5rem; }
+.star-deco { font-size: 13px; color: #7F77DD; margin-bottom: 8px; letter-spacing: 6px; }
+.title { font-size: 22px; font-weight: bold; color: #7F77DD; margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: #AFA9EC; }
+
+.card { background: #ffffff; border: 1px solid #CECBF6; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.label { font-size: 13px; font-weight: bold; color: #3C3489; margin-bottom: 10px; display: block; }
+textarea { width: 100%; min-height: 80px; font-size: 15px; color: #3C3489; background: #ffffff; border: 1px solid #CECBF6; border-radius: 8px; padding: 10px 12px; resize: none; line-height: 1.6; font-family: sans-serif; }
+textarea::placeholder { color: #CECBF6; }
+textarea:focus { outline: none; border-color: #AFA9EC; }
+.tag-label { font-size: 12px; font-weight: bold; color: #AFA9EC; width: 100%; margin: 12px 0 6px; display: block; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 12px; padding: 5px 14px; border-radius: 20px; border: 1px solid #CECBF6; background: #ffffff; color: #7F77DD; cursor: pointer; transition: all 0.15s; }
+.tag:hover { background: #EEEDFE; border-color: #AFA9EC; }
+
+.convert-btn { width: 100%; padding: 14px; font-size: 16px; font-weight: bold; background: #7F77DD; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 1rem; letter-spacing: 0.05em; transition: all 0.15s; }
+.convert-btn:hover { background: #534AB7; }
+
+.result-card { background: #ffffff; border: 1px solid #CECBF6; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; display: none; text-align: center; }
+.r-label { font-size: 11px; color: #7F77DD; letter-spacing: 0.08em; margin-bottom: 8px; font-weight: bold; }
+.r-before { font-size: 13px; color: #AFA9EC; margin-bottom: 6px; text-decoration: line-through; }
+.r-arrow { font-size: 20px; color: #7F77DD; margin-bottom: 8px; }
+.r-text { font-size: 18px; font-weight: bold; color: #3C3489; line-height: 1.6; margin-bottom: 12px; }
+.r-msg { font-size: 13px; color: #534AB7; border-top: 1px solid #EEEDFE; padding-top: 10px; line-height: 1.7; }
+
+.h-title { font-size: 12px; font-weight: bold; color: #AFA9EC; margin: 1rem 0 8px; }
+.h-item { background: #ffffff; border: 1px solid #EEEDFE; border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; }
+.h-before { font-size: 12px; color: #AFA9EC; text-decoration: line-through; margin-bottom: 2px; }
+.h-after { font-size: 13px; color: #3C3489; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="app-bg">
+  <div class="app">
+    <div class="header">
+      <div class="star-deco">✦ ✦ ✦</div>
+      <div class="title">言葉の錬金術師</div>
+      <div class="subtitle">ネガティブな言葉を、光に変える</div>
+    </div>
+
+    <div class="card">
+      <label class="label">変換したい言葉・口癖を入力してください</label>
+      <textarea id="input" placeholder="例：どうせダメ　例：疲れた　例：私には無理"></textarea>
+      <span class="tag-label">よく使う口癖をタップ：</span>
+      <div class="tags">
+        <button class="tag" onclick="setI(this)">どうせダメ</button>
+        <button class="tag" onclick="setI(this)">うまくいかない</button>
+        <button class="tag" onclick="setI(this)">疲れた</button>
+        <button class="tag" onclick="setI(this)">私には無理</button>
+        <button class="tag" onclick="setI(this)">また失敗した</button>
+        <button class="tag" onclick="setI(this)">自分がわからない</button>
+        <button class="tag" onclick="setI(this)">また流されてしまった</button>
+        <button class="tag" onclick="setI(this)">苦手な人がいる</button>
+        <button class="tag" onclick="setI(this)">何をしたらいいかわからない</button>
+        <button class="tag" onclick="setI(this)">誰にもわかってもらえない</button>
+        <button class="tag" onclick="setI(this)">お金がない</button>
+        <button class="tag" onclick="setI(this)">時間がない</button>
+        <button class="tag" onclick="setI(this)">もう嫌だ</button>
+        <button class="tag" onclick="setI(this)">どうせ私なんか</button>
+        <button class="tag" onclick="setI(this)">将来が不安</button>
+      </div>
+    </div>
+
+    <button class="convert-btn" onclick="conv()">✦ 言葉を変換する ✦</button>
+
+    <div class="result-card" id="result">
+      <div class="r-label">✦ 変換されました ✦</div>
+      <div class="r-before" id="rbefore"></div>
+      <div class="r-arrow">↓</div>
+      <div class="r-text" id="rtext"></div>
+      <div class="r-msg" id="rmsg"></div>
+    </div>
+
+    <div id="hist" style="display:none;">
+      <div class="h-title">変換履歴</div>
+      <div id="hlist"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const P=[
+  {k:'どうせダメ',v:'まだ始まったばかり、可能性は開いている',m:'その言葉を手放すだけで、新しい扉が開き始めます。'},
+  {k:'どうせうまくいかない',v:'未知数の可能性がある',m:'うまくいかないことは、次の道を教えてくれるサイン。'},
+  {k:'どうせ私なんか',v:'私にしかできないことがある',m:'あなたの存在はそれだけで、誰かの力になっています。'},
+  {k:'私には無理',v:'まだやり方を探している途中',m:'「無理」と感じるとき、実は一番成長している瞬間です。'},
+  {k:'できない',v:'まだまだ成長中、可能性は無限大',m:'できないは「まだ」の言葉。時間が解決してくれます。'},
+  {k:'また失敗した',v:'次への大切な気づきをもらった',m:'失敗は最高の先生。あなたは確実に賢くなっています。'},
+  {k:'うまくいかない',v:'今は土台を作っている大切な時間',m:'見えないところで、着実に積み上がっています。'},
+  {k:'自信がない',v:'謙虚さという強さを持っている',m:'自信は行動の後についてくるもの。まず一歩だけ。'},
+  {k:'ダメな自分',v:'進化の途中にいる自分',m:'ダメな自分に気づけることが、すでに成長の証。'},
+  {k:'役に立てない',v:'まだ気づいていない才能がある',m:'あなたがいるだけで、救われている人が必ずいます。'},
+  {k:'疲れた',v:'精一杯生きてきた証、今は休む時',m:'疲れたと感じるのは、全力で頑張ってきたから。'},
+  {k:'もう嫌だ',v:'変わりたいというサインが来ている',m:'「嫌だ」という感情は、本当の望みを教えてくれています。'},
+  {k:'限界',v:'新しいステージへの扉の前に立っている',m:'限界を感じたとき、人は必ず一段階成長します。'},
+  {k:'しんどい',v:'真剣に生きている証',m:'しんどさを感じるのは、それだけ本気だから。'},
+  {k:'つらい',v:'感じる力が豊かな証',m:'つらさを感じられることは、深く生きている証拠です。'},
+  {k:'苦手な人がいる',v:'その人は私の成長を映す鏡',m:'苦手な人との出会いは、自分を知るチャンスです。'},
+  {k:'誰にもわかってもらえない',v:'私の感性は特別なギフト',m:'わかってもらえないほどの深さを、あなたは持っている。'},
+  {k:'また流されてしまった',v:'人の気持ちに寄り添える優しさがある',m:'流れる柔軟性は、人を癒す大きな力になります。'},
+  {k:'誰にも好かれていない',v:'これからもっと素敵な人に出会える',m:'本当に合う人との出会いは、必ずやってきます。'},
+  {k:'嫌われている',v:'自分らしくいられる関係を引き寄せている',m:'全員に好かれなくていい。大切な人に愛されれば十分。'},
+  {k:'一人ぼっち',v:'自分と深くつながれる時間がある',m:'一人の時間は、本当の自分を取り戻す大切な時間。'},
+  {k:'人が怖い',v:'人の気持ちを深く感じ取れる繊細さがある',m:'繊細さは、人を傷つけない優しさにつながっています。'},
+  {k:'お金がない',v:'新しい流れを呼び込む準備ができている',m:'お金は流れるもの。今は次の波を待っている時間。'},
+  {k:'時間がない',v:'今日も全力で生きている',m:'時間がないと感じるほど、あなたは充実しています。'},
+  {k:'仕事がうまくいかない',v:'より良いやり方を発見している途中',m:'うまくいかない経験が、一番の財産になります。'},
+  {k:'仕事が遅い',v:'仕事が丁寧で確実',m:'丁寧さは信頼を生む、最高の武器です。'},
+  {k:'評価されない',v:'本当の価値を知っている人が必ずいる',m:'評価は遅れてやってくることが多いもの。'},
+  {k:'自己主張が強い',v:'自分の意見をしっかり持っている',m:'自分の意見を持つことは、リーダーの資質です。'},
+  {k:'文句が多い',v:'細かいところに気がつく感性がある',m:'気づく力は、物事を良くしていく原動力です。'},
+  {k:'うるさい',v:'活気があり場を明るくする',m:'あなたのエネルギーで、救われている人がいます。'},
+  {k:'おしゃべり',v:'話し上手で人を楽しませられる',m:'言葉で人をつなぐ才能を持っています。'},
+  {k:'八方美人',v:'誰とでも仲良くなれる社交性がある',m:'人の良いところを見つけられる眼を持っています。'},
+  {k:'飽きっぽい',v:'いろんなことに興味がある好奇心旺盛',m:'多くを知ることが、あなたの深みになっています。'},
+  {k:'優柔不断',v:'物事をよく考えられる慎重さがある',m:'じっくり考えることで、後悔の少ない選択ができます。'},
+  {k:'小心者',v:'慎重に物事を考えられる',m:'慎重さは、大切なものを守る力です。'},
+  {k:'心配性',v:'先を読む力と愛情の深さがある',m:'心配するのは、それだけ大切に思っているから。'},
+  {k:'感情的',v:'感情が豊かで本音で生きている',m:'感情を感じられることは、生きている証です。'},
+  {k:'自分がわからない',v:'自分を深く知ろうとしている途中',m:'自分を探す旅は、最も豊かな旅です。'},
+  {k:'何をしたらいいかわからない',v:'新しいステージへの扉の前に立っている',m:'わからないときは、心が一番正直に動いているとき。'},
+  {k:'将来が不安',v:'未来を真剣に考えられる力がある',m:'不安を感じるのは、未来を大切に思っているから。'},
+  {k:'変われない',v:'少しずつ確実に変化している',m:'変化は気づかないほど、ゆっくり起きています。'},
+  {k:'生きる意味がわからない',v:'意味を自分で創っていける自由がある',m:'意味は見つけるものではなく、作るもの。'},
+];
+
+function setI(btn){document.getElementById('input').value=btn.textContent;document.getElementById('input').focus();}
+function match(inp){const t=inp.trim();for(const p of P){if(t.includes(p.k)||p.k.includes(t))return p;}return null;}
+let hist=[];
+function conv(){
+  const inp=document.getElementById('input').value.trim();if(!inp)return;
+  const p=match(inp);
+  const out=p?p.v:'今のあなたには、まだ見えていない可能性がたくさんある';
+  const msg=p?p.m:'どんな言葉も、光の側面から見ることができます。';
+  document.getElementById('rbefore').textContent=inp;
+  document.getElementById('rtext').textContent=out;
+  document.getElementById('rmsg').textContent=msg;
+  const rc=document.getElementById('result');rc.style.display='block';
+  rc.scrollIntoView({behavior:'smooth',block:'start'});
+  hist.unshift({b:inp,a:out});if(hist.length>5)hist.pop();
+  document.getElementById('hist').style.display='block';
+  document.getElementById('hlist').innerHTML=hist.map(h=>`<div class="h-item"><div class="h-before">${h.b}</div><div class="h-after">→ ${h.a}</div></div>`).join('');
+}
+</script>
+</body>
+</html>
